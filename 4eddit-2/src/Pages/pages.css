@@ -1,0 +1,61 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+a{
+    text-decoration: none;
+    color: #ff782e;
+}
+
+a:visited{
+   text-decoration: none;
+   color: #ff782e;
+}
+
+h1 {
+    color: #ff782e;
+    font-size: 2em;
+    text-align: center;
+    margin-bottom: 5%;
+}
+  
+h3{
+    text-align: center;
+    color: #415259;
+}
+
+h4{
+    color:#a1b9c1;
+}
+
+#logo-grande {
+    width: 55vw;
+    margin-bottom: 5%;
+}
+
+.formulario{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    margin:0;
+    padding: 0;
+}
+
+.botao-inicial{
+    margin-top: 10vw;
+}
+
+.tela-toda {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color:#415259;
+    background-color: #fff7ef;
+}
