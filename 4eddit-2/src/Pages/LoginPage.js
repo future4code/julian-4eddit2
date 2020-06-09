@@ -1,5 +1,3 @@
-//Falta fazer que os forms sejam controlados
-
 import React, { useState} from "react";
 import { useHistory } from "react-router";
 import clsx from 'clsx';
@@ -54,28 +52,39 @@ const LoginPage = (props) => {
   });
 
   const login = async () => {
+    
     const body ={      
       email: form.user,
       password: form.password,
     };
-    try {
-      const response = await axios.post(`${props.baseUrl}/login`, body);
-      localStorage.setItem("token", response.data.token);
-      history.push("/home");
-    } catch (err) {
-      console.log(err);
+    if(body.email == ''){
+      alert('Digite um usuário');
+    }
+    else if(body.password == ''){
+      alert('Digite sua senha');
+    } else {
+      try {
+        const response = await axios.post(`${props.baseUrl}/login`, body);
+        localStorage.setItem("token", response.data.token);
+        history.push("/home");
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
   
   
   const submitForm = event => {
     event.preventDefault()
+    login()
   }
 
   const mudaValorInput = event => {
     const { name, value } = event.target;
     onChange(name, value);
-  };
+   };
+
+  
 
   const handleClickShowPassword = () => {
     setMostraSenha(!mostraSenha);
@@ -87,7 +96,6 @@ const LoginPage = (props) => {
   };
 
 
-
   return (
     <MuiThemeProvider theme={theme}>
       <div className="tela-toda">
@@ -97,13 +105,13 @@ const LoginPage = (props) => {
         
   
        <form className="formulario" onSubmit={submitForm}>
-          <FormControl className={clsx(classes.margin, classes.textField)} variant="filled">
+          <FormControl className={clsx(classes.margin, classes.textField)} variant="filled" >
               <InputLabel htmlFor="filled-adornment-password">Usuário (e-mail)</InputLabel>
               <FilledInput
                 id="filled-adornment-password"
                 required
                 name='user'
-                type={'text'}
+                type={'email'}
                 value={form.user}
                 onChange={mudaValorInput}
                 endAdornment={
@@ -138,7 +146,7 @@ const LoginPage = (props) => {
               />
             </FormControl>
   
-            <Fab onClick={login} variant="extended" color="secondary" aria-label="add" className={clsx(classes.margin, classes.botao)}>
+            <Fab variant="extended" color="secondary" aria-label="add" type="submit" className={clsx(classes.margin, classes.botao)}>
               Entre &nbsp;
               <SendIcon className={classes.extendedIcon} />                
             </Fab>

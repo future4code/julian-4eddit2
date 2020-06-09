@@ -53,20 +53,24 @@ h4{
     align-items: center;
     width: 98%;
     min-height: 80%;
-    margin-top: 10%;
 }
 
 #logo-pequeno{
     width: 40%;
 }
 
-#card-postagem{
-    width: 96%;
-    padding: 2%;
+#adiciona-post {
+    width: 98%;
+    padding: 1%;
     font-display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
+}
+
+
+#titulo-novo-post{
+    margin: 1% 0 2% 0;
 }
 
 .formulario{
@@ -101,6 +105,7 @@ h4{
     flex-direction: column;
     justify-content: flex-start;
     min-height: 80vh;
+    margin-top: 3%;
 }
 
 .posts, .cabecalho-post, .conteudo-post {
@@ -109,7 +114,7 @@ h4{
 .posts{
     padding: 1%;
     width: 90%;
-    border: solid 1px black;
+    border: solid 1px #415259;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -121,7 +126,7 @@ h4{
 
 .cabecalho-post, .conteudo-post{
     width: 96%;
-    margin-bottom: 2%;
+    margin-bottom: 3%;
 }
 
 .cabecalho-post{
@@ -134,15 +139,21 @@ h4{
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
+    margin-bottom: 3%;
 }
 
+.username{
+    font-size: 1.2rem;
+}
 .titulo-post{
     font-weight: bold;
     font-size: 1.2rem;
+    margin-bottom: 1%;
 }
 
 .texto-post{
-    font-size: 0.8rem;
+    font-size: 1rem;
+    padding: 1%;
 }
 
 .icones-carma{
@@ -153,8 +164,8 @@ h4{
     display: flex;
     align-items: center;
     justify-content: space-around;
-    margin-bottom: 2%;
-    padding: 1% 2% 0 2%;
+    padding: 1.5% 2% ;
+    border-top: 1px solid #415259;
 }
 
 .rodapé-post{
