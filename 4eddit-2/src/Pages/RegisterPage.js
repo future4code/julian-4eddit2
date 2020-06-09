@@ -134,7 +134,7 @@ const RegisterPage = (props ) => {
                   value={form.senha}
                   onChange={mudaValorInput}
                   inputProps={{ 
-                    pattern: "[a-zA-Z]{6,}",
+                    pattern: "[a-zA-Z0-9]{6,}",
                     title: "A senha deve conter no mínimo 6 caracteres entre números e letras" }}
                   endAdornment={
                     <InputAdornment position="end">

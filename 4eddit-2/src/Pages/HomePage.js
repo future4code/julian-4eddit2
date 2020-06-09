@@ -143,6 +143,12 @@ const HomePage = (props) => {
                     multiline
                     required
                     size="small"
+                    name='senha'
+                  value={form.senha}
+                  onChange={mudaValorInput}
+                  inputProps={{ 
+                    pattern: "{5,300}",
+                    title: "O texto deve ter entre 5 e 300 caracteres" }}
                   />
                   <Button 
                     color="primary"
