@@ -1,5 +1,6 @@
 //Falta fazer que os forms sejam controlados
 //Falta estilizar melhor o add post
+//Falta a função para postar comentários
 //Falta colocar a restrição para entrar nesta página somente se estiver logado
 
 import React from "react";

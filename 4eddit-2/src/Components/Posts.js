@@ -3,6 +3,7 @@
 // Falta implementar as funções de comentários e carma
 //Falta Estilizar melhor os cards
 //Falta colocar uma função que abra somente os comentários do card selecionado
+//Falta função para pegar comentários
 
 import React, { useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
@@ -90,6 +91,7 @@ const Posts = (props) => {
     })
     .then(response => {
       setPosts(response.data.posts)
+      console.log(token)
     })
     .catch(err => {
        console.log(err)
