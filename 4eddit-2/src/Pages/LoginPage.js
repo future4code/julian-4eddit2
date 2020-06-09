@@ -1,3 +1,5 @@
+//Falta fazer que os forms sejam controlados
+
 import React, { useState} from "react";
 import { useHistory } from "react-router";
 import clsx from 'clsx';
@@ -17,6 +19,7 @@ import SendIcon from '@material-ui/icons/Send';
 import "./pages.css"
 import Logo from "../img/labeddit.png"
 import useForm from "../hooks/Formulario"
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const LoginPage = () => {
+const LoginPage = (props) => {
   const classes = useStyles();
   const history = useHistory();
   const [mostraSenha, setMostraSenha] = useState(false);
@@ -50,22 +53,18 @@ const LoginPage = () => {
     password: '',
   });
 
-  const login = () =>{
-    console.log("funcionou o botão")
-  //  const body ={      
-  //    password: form.senha,
-  //    email: form.user,
-  //  }
-  //  axios
-  //    .post(`${props.baseUrl}/login`, body)
-  //    .then(response => {
-  //      console.log(response.data);
-  //      resetForm();
-  //      history.push("/home");
-  //    })
-  //    .catch(err => {
-  //      console.log(err);
-  //    });
+  const login = async () => {
+    const body ={      
+      email: form.user,
+      password: form.password,
+    };
+    try {
+      const response = await axios.post(`${props.baseUrl}/login`, body);
+      localStorage.setItem("token", response.data.token);
+      history.push("/home");
+    } catch (err) {
+      console.log(err);
+    }
   };
   
   

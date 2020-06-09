@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+//Falta fazer que os forms sejam controlados
+//Falta estilizar melhor o add post
+//Falta colocar a restrição para entrar nesta página somente se estiver logado
+
+import React from "react";
 import { useHistory } from "react-router";
-import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,11 +15,9 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import Zoom from '@material-ui/core/Zoom';
 import styled from 'styled-components'
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import FormControl from '@material-ui/core/FormControl';
 import { MuiThemeProvider } from "@material-ui/core";
 import theme from "../theme.js";
 import Logo from "../img/labeddit2.png"
@@ -25,6 +26,7 @@ import SairIcon from '@material-ui/icons/ExitToApp';
 import axios from "axios";
 import useForm from "../hooks/Formulario"
 import PostAddIcon from '@material-ui/icons/PostAdd';
+import Posts from '../Components/Posts'
 
 
 
@@ -58,9 +60,6 @@ const useStyles = makeStyles((theme) => ({
 function ScrollTop(props) {
   const { children, window } = props;
   const classes = useStyles();
-  // Note that you normally won't need to set the window ref as useScrollTrigger
-  // will default to window.
-  // This is only being set here because the demo is in an iframe.
   const trigger = useScrollTrigger({
     target: window ? window() : undefined,
     disableHysteresis: true,
@@ -84,15 +83,6 @@ function ScrollTop(props) {
   );
 }
 
-ScrollTop.propTypes = {
-  children: PropTypes.element.isRequired,
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window: PropTypes.func,
-};
-
 const HomePage = (props) => {
   const history = useHistory();
   const classes = useStyles();
@@ -110,6 +100,7 @@ const HomePage = (props) => {
   };
 
   const goToLoginPage = () => {
+    localStorage.clear();
     history.push("/");
   };
 
@@ -155,12 +146,12 @@ const HomePage = (props) => {
                     className={classes.botaoPostagem}
                     onClick={adicionaPost}>
                     Enviar
-                    < PostAddIcon />
+                    <PostAddIcon />
                   </Button>
                 </form>
               </CardContent>
-                
             </Card>
+            <Posts urlBase={props.baseUrl}/>
           </Box>
         </Container>
         <ScrollTop {...props}>
