@@ -20,18 +20,18 @@ import useForm from "../hooks/Formulario"
 
 
 const useStyles = makeStyles((theme) => ({
-    margin: {
-        margin: theme.spacing(1),
-    },
-    extendedIcon: {
-        marginRight: theme.spacing(1),
-    },
-    textField: {
-        width: '25ch',
-    },
-    botao: {
-      margin: '3ch 0',
-    }
+  margin: {
+    margin: theme.spacing(1),
+  },
+  extendedIcon: {
+    marginRight: theme.spacing(1),
+  },
+  textField: {
+    width: '25ch',
+  },
+  botao: {
+  margin: '3ch 0',
+  }
 }));
 
 
@@ -113,6 +113,9 @@ const RegisterPage = (props ) => {
                   name='email'
                   value={form.email}
                   onChange={mudaValorInput}
+                  inputProps={{ 
+                    pattern: "/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/gi",
+                    title: "Insira um e-mail válido" }}
                   endAdornment={
                     <InputAdornment position="end">
                       <IconMail color="secondary"/>
@@ -128,11 +131,11 @@ const RegisterPage = (props ) => {
                   type='text'
                   required
                   name='senha'
-                  inputProps={{ 
-                    pattern: "/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/gi",
-                    title: "Insira um e-mail válido" }}
                   value={form.senha}
                   onChange={mudaValorInput}
+                  inputProps={{ 
+                    pattern: "[a-zA-Z0-9]{6,}",
+                    title: "A senha deve conter no mínimo 6 caracteres entre números e letras" }}
                   endAdornment={
                     <InputAdornment position="end">
                       <IconSenha color="secondary"/>

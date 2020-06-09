@@ -50,6 +50,25 @@ const LoginPage = () => {
     password: '',
   });
 
+  const login = () =>{
+    console.log("funcionou o botão")
+  //  const body ={      
+  //    password: form.senha,
+  //    email: form.user,
+  //  }
+  //  axios
+  //    .post(`${props.baseUrl}/login`, body)
+  //    .then(response => {
+  //      console.log(response.data);
+  //      resetForm();
+  //      history.push("/home");
+  //    })
+  //    .catch(err => {
+  //      console.log(err);
+  //    });
+  };
+  
+  
   const submitForm = event => {
     event.preventDefault()
   }
@@ -80,7 +99,7 @@ const LoginPage = () => {
   
        <form className="formulario" onSubmit={submitForm}>
           <FormControl className={clsx(classes.margin, classes.textField)} variant="filled">
-              <InputLabel htmlFor="filled-adornment-password">Usuário</InputLabel>
+              <InputLabel htmlFor="filled-adornment-password">Usuário (e-mail)</InputLabel>
               <FilledInput
                 id="filled-adornment-password"
                 required
@@ -120,7 +139,7 @@ const LoginPage = () => {
               />
             </FormControl>
   
-            <Fab variant="extended" color="secondary" aria-label="add" className={clsx(classes.margin, classes.botao)}>
+            <Fab onClick={login} variant="extended" color="secondary" aria-label="add" className={clsx(classes.margin, classes.botao)}>
               Entre &nbsp;
               <SendIcon className={classes.extendedIcon} />                
             </Fab>

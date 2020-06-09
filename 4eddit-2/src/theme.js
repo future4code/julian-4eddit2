@@ -6,6 +6,9 @@ export default createMuiTheme({
         useNextVariants: true
     },
     palette:{
+        info:{
+           main: "#feb059"
+        },
         primary: {
             light: "#feb059",
             main: "#ff782e",
