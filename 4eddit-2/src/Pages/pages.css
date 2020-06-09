@@ -89,7 +89,7 @@ h4{
     display: flex;
     align-items: center;
     color:#415259;
-    background-color: #fff3e4;
+    background-color: rgba(254, 176, 89, 0.05);
 }
 
 .tela-toda {
