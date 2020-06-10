@@ -2,7 +2,6 @@
 //Falta fazer que os forms sejam controlados
 // Falta implementar as funções de comentários e carma
 //Falta colocar uma função que abra somente os comentários do card selecionado
-//Falta função para pegar comentários
 //Falta ordenar por data
 // Colocar as requisições da API num Hook
 //Colocar as formatações de data e hora num hook

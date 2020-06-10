@@ -1,4 +1,4 @@
-//Falta função para pegar comentários
+//Falta funções de carma
 //Falta ordenar por data
 // Colocar as requisições da API num Hook
 //Colocar as formatações de data e hora num hook
@@ -61,57 +61,28 @@ const SessaoComentarios = (props) =>{
     comentario: '',
   });
   const [comentarios, setComentarios] = useState([
-      {
-          "userVoteDirection": 0,
-          "id": "hRW0BBr0uu7luijXQgmZ",
-          "createdAt": 1591741372440,
-          "votesCount": 0,
-          "username": "gisber",
-          "text": "Great!"
-      },
-      {
-          "userVoteDirection": 0,
-          "id": "GNuoez434aFA7IjPby8K",
-          "createdAt": 1591730549167,
-          "votesCount": 0,
-          "username": "teste",
-          "text": "teste"
-      }, {
-          "userVoteDirection": 1,
-          "id": "PvA5iyq6xnHKT7LFyg73",
-          "username": "darvas",
-          "text": "Texto do comentario aqui!",
-          "votesCount": 1,
-          "createdAt": 1591622964376
-      }, {
-          "userVoteDirection": 0,
-          "id": "zKNLvP9WP9ePBYhcezfb",
-          "createdAt": 1591730582649,
-          "votesCount": 0,
-          "username": "teste",
-          "text": "teste2"
-      }
+     
   ]);
 
-//  useEffect(() => {
-//    pegaComent()
-//  }, [props.baseUrl, props.id])
-//
-//  const pegaComent = () => {
-//    const token = window.localStorage.getItem("token")
-//    axios
-//    .get(`${props.baseUrl}/posts/${props.id}`, {
-//        headers: {
-//            Authorization: token
-//        }
-//    })
-//    .then(response => {
-//    console.log(response.data)
-//    })
-//    .catch(err => {
-//       console.log(err)
-//     });
-//  }
+  useEffect(() => {
+    pegaComent()
+  }, [props.baseUrl, props.id])
+
+  const pegaComent = () => {
+    const token = window.localStorage.getItem("token")
+    axios
+    .get(`${props.baseUrl}/posts/${props.id}`, {
+        headers: {
+           'Authorization': token
+        }
+    })
+    .then(response => {
+    setComentarios(response.data.post.comments)
+    })
+    .catch(err => {
+       console.log(err)
+     });
+  }
 
     const submitForm = event => {
         event.preventDefault()
@@ -130,9 +101,27 @@ const SessaoComentarios = (props) =>{
       onChange(name, value);
     };
 
-    const adicionaComent = () => {
-        console.log('funcionou botão')
-        resetForm()
+    const adicionaComent = async () => {
+       const token = window.localStorage.getItem("token")
+       const body ={      
+         text: form.comentario,
+       };
+       if(body.text === ''){
+         alert('Digite uma Comentário');
+       } else {
+         try {
+           const response = await axios.post(`${props.baseUrl}/posts/${props.id}/comment`, body, {
+             headers: {
+               Authorization: token
+             }
+           });
+           console.log(response)
+           pegaComent()
+         } catch (err) {
+           console.log(err);
+         }
+       }
+       resetForm()
     }
 
     const formataData = (dataEstranha)=> {    
@@ -159,7 +148,7 @@ const SessaoComentarios = (props) =>{
     }
 
     const listaComent = comentarios.map((coment) => {
-      return <article className='coments'>
+        return <article className='coments'>
             <IconeAvatar>{coment.username.toUpperCase().substr(0, 1)}</IconeAvatar>
             <section className='container-coment'>
                 <section className='conteudo-coment'>
@@ -193,8 +182,8 @@ const SessaoComentarios = (props) =>{
                     multiline
                     required
                     size="small"
-                    name='senha'
-                    value={form.senha}
+                    name='comentario'
+                    value={form.comentario}
                     onChange={mudaValorInput}
                     inputProps={{ 
                       pattern: "{5,100}",

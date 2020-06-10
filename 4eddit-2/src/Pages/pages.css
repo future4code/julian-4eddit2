@@ -154,6 +154,8 @@ h4{
 .texto-post{
     font-size: 1rem;
     padding: 1%;
+    text-align: justify;
+    text-justify: inter-word;
 }
 
 .icones-carma{
@@ -219,6 +221,11 @@ h4{
     flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
+}
+
+.texto-coment{
+    text-align: justify;
+    text-justify: inter-word;
 }
 
 
