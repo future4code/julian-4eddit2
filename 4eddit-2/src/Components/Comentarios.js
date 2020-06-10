@@ -1,4 +1,3 @@
-//Falta funções de carma
 //Falta ordenar por data
 // Colocar as requisições da API num Hook
 //Colocar as formatações de data e hora num hook
@@ -21,6 +20,7 @@ const Comentarios = styled.section `
     flex-direction:column;
     justify-content: space-between;
     align-items: center;
+    border-top: 1px solid rgba(64, 82, 89, 0.3);
 `
 const IconeAvatar = styled(Avatar)`
     background-color: #feb059;
@@ -84,123 +84,151 @@ const SessaoComentarios = (props) =>{
      });
   }
 
-    const submitForm = event => {
-        event.preventDefault()
-    }
+  const submitForm = event => {
+      event.preventDefault()
+  }
 
-    const gosteiComent = () =>{
-        console.log('gostei')
-    }
-
-    const odieiComent = () => {
-        console.log('odiei')
-    }
-
-    const mudaValorInput = event => {
-      const { name, value } = event.target;
-      onChange(name, value);
+  const gosteiComent = (id) =>{
+    const token = window.localStorage.getItem("token")
+    const body ={      
+      direction: 1,
     };
+    axios
+    .put(`${props.baseUrl}/posts/${props.id}/comment/${id}/vote`, body, {
+        headers: {
+          Authorization: token
+        }
+      })
+    .then(response => {
+      console.log(response.data);
+      pegaComent()
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  }
 
-    const adicionaComent = async () => {
-       const token = window.localStorage.getItem("token")
-       const body ={      
-         text: form.comentario,
-       };
-       if(body.text === ''){
-         alert('Digite uma Comentário');
-       } else {
-         try {
-           const response = await axios.post(`${props.baseUrl}/posts/${props.id}/comment`, body, {
-             headers: {
-               Authorization: token
-             }
-           });
-           console.log(response)
-           pegaComent()
-         } catch (err) {
-           console.log(err);
-         }
-       }
-       resetForm()
+  const odieiComent = (id) => {
+    const token = window.localStorage.getItem("token")
+    const body ={      
+      direction: -1,
+    };
+    axios
+    .put(`${props.baseUrl}/posts/${props.id}/comment/${id}/vote`, body, {
+        headers: {
+          Authorization: token
+        }
+      })
+    .then(response => {
+      pegaComent()
+      console.log(response.data);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  }
+
+  const mudaValorInput = event => {
+    const { name, value } = event.target;
+    onChange(name, value);
+  };
+
+  const adicionaComent = async () => {
+    const token = window.localStorage.getItem("token")
+    const body ={      
+      text: form.comentario,
+    };
+    if(body.text === ''){
+      alert('Digite uma Comentário');
+    } else {
+      try {
+        const response = await axios.post(`${props.baseUrl}/posts/${props.id}/comment`, body, {
+          headers: {
+            Authorization: token
+          }
+        });
+        console.log(response)
+        pegaComent()
+      } catch (err) {
+        console.log(err);
+      }
     }
-
-    const formataData = (dataEstranha)=> {    
-        let dataFormatadaComprida
-        let dataFormatadaFinal
-        dataFormatadaComprida = new Date(dataEstranha)
-        let dia = (dataFormatadaComprida.getDate() < 10 ? "0" : "") + dataFormatadaComprida.getDate();
-        let mes = (dataFormatadaComprida.getMonth() + 1 < 10 ? "0" : "") + (dataFormatadaComprida.getMonth() + 1);
-        let ano = dataFormatadaComprida.getYear() - 100;
-        const novaData = dia + "/" + mes + "/" + ano
-        dataFormatadaFinal = novaData;
-        return dataFormatadaFinal
-    }
-
-    const formataHora = (dataEstranha) => {
-        let dataFormatadaComprida
-        let horaFormatada
-        dataFormatadaComprida = new Date(dataEstranha)
-        let hr = (dataFormatadaComprida.getHours() < 10 ? "0" : "") + dataFormatadaComprida.getHours();
-        let min = (dataFormatadaComprida.getMinutes() < 10 ? "0" : "") + dataFormatadaComprida.getMinutes();
-        const novaHora = hr + ":" + min
-        horaFormatada = novaHora;
-        return(horaFormatada)
-    }
-
-    const listaComent = comentarios.map((coment) => {
-        return <article className='coments'>
-            <IconeAvatar>{coment.username.toUpperCase().substr(0, 1)}</IconeAvatar>
-            <section className='container-coment'>
-                <section className='conteudo-coment'>
-                    <p className="username-coment"> <b>{coment.username}:</b></p>
-                    <p className='texto-coment'>"{coment.text}"</p>
-                </section>
-                
-                <section className='data-coment'>
-                    <p>{formataData(coment.createdAt)} </p>
-                    <p>&nbsp; às {formataHora(coment.createdAt)}</p>
-                </section>
-                
-                <section className='carma-coment'>
-                  <img src={IconUp} alt={'Gostei'} className='icones-carma-coment' onClick={gosteiComent}/>
-                  <Carma isCool={coment.votesCount}>{coment.votesCount}</Carma>
-                  <img src={IconDown} alt={'Odiei'} className='icones-carma-coment' onClick={odieiComent}/>
-                </section>
+    resetForm()
+  }
+  const formataData = (dataEstranha)=> {    
+    let dataFormatadaComprida
+    let dataFormatadaFinal
+    dataFormatadaComprida = new Date(dataEstranha)
+    let dia = (dataFormatadaComprida.getDate() < 10 ? "0" : "") + dataFormatadaComprida.getDate();
+    let mes = (dataFormatadaComprida.getMonth() + 1 < 10 ? "0" : "") + (dataFormatadaComprida.getMonth() + 1);
+    let ano = dataFormatadaComprida.getYear() - 100;
+    const novaData = dia + "/" + mes + "/" + ano
+    dataFormatadaFinal = novaData;
+    return dataFormatadaFinal
+  }
+  const formataHora = (dataEstranha) => {
+    let dataFormatadaComprida
+    let horaFormatada
+    dataFormatadaComprida = new Date(dataEstranha)
+    let hr = (dataFormatadaComprida.getHours() < 10 ? "0" : "") + dataFormatadaComprida.getHours();
+    let min = (dataFormatadaComprida.getMinutes() < 10 ? "0" : "") + dataFormatadaComprida.getMinutes();
+    const novaHora = hr + ":" + min
+    horaFormatada = novaHora;
+    return(horaFormatada)
+  }
+  const listaComent = comentarios.map((coment) => {
+    return <article className='coments'>
+        <IconeAvatar>{coment.username.toUpperCase().substr(0, 1)}</IconeAvatar>
+        <section className='container-coment'>
+            <section className='conteudo-coment'>
+                <p className="username-coment"> <b>{coment.username}:</b></p>
+                <p className='texto-coment'>"{coment.text}"</p>
             </section>
-        </article>
-  })
-
-    return(
-        <Comentarios isMostraComent={props.isMostraComent}>
-            <form onSubmit={submitForm}>
-                <TextField
-                    className={classes.inputComentario}
-                    id="outlined-secondary"
-                    label="Insira um comentário"
-                    variant="outlined"
-                    color="secondary"
-                    multiline
-                    required
-                    size="small"
-                    name='comentario'
-                    value={form.comentario}
-                    onChange={mudaValorInput}
-                    inputProps={{ 
-                      pattern: "{5,100}",
-                      title: "O texto deve ter entre 5 e 100 caracteres" }}
-                />
-                <Button 
-                  color="primary"
-                  className={classes.botaoComentario}
-                  onClick={adicionaComent}>
-                  Enviar
-                  <ComentAddIcon />
-                </Button>
-            </form>
             
-            {listaComent}
-        </Comentarios>
-    );
+            <section className='data-coment'>
+                <p>{formataData(coment.createdAt)} </p>
+                <p>&nbsp; às {formataHora(coment.createdAt)}</p>
+            </section>
+            
+            <section className='carma-coment'>
+              <img src={IconUp} alt={'Gostei'} className='icones-carma-coment' onClick={() => gosteiComent(coment.id)}/>
+              <Carma isCool={coment.votesCount}>{coment.votesCount}</Carma>
+              <img src={IconDown} alt={'Odiei'} className='icones-carma-coment' onClick={() => odieiComent(coment.id)}/>
+            </section>
+        </section>
+    </article>
+})
+  return(
+      <Comentarios isMostraComent={props.isMostraComent}>
+          <form onSubmit={submitForm}>
+              <TextField
+                  className={classes.inputComentario}
+                  id="outlined-secondary"
+                  label="Insira um comentário"
+                  variant="outlined"
+                  color="secondary"
+                  multiline
+                  required
+                  size="small"
+                  name='comentario'
+                  value={form.comentario}
+                  onChange={mudaValorInput}
+                  inputProps={{ 
+                    pattern: "{5,100}",
+                    title: "O texto deve ter entre 5 e 100 caracteres" }}
+              />
+              <Button 
+                color="primary"
+                className={classes.botaoComentario}
+                onClick={adicionaComent}>
+                Enviar
+                <ComentAddIcon />
+              </Button>
+          </form>
+          
+          {listaComent}
+      </Comentarios>
+  );
 }
 
 export default SessaoComentarios
