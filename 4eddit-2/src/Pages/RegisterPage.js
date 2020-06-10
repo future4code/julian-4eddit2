@@ -89,6 +89,7 @@ const RegisterPage = (props ) => {
                   id="input-user"
                   type='text'
                   required
+                  name='user'
                   value={form.user}
                   onChange={mudaValorInput}
                   inputProps={{ 

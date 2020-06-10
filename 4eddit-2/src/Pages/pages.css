@@ -158,6 +158,10 @@ h4{
 
 .icones-carma{
     width: 3%;
+} 
+
+.icones-carma-coment {
+    width: 8%;
 }
 
 .icones-posts{
@@ -165,9 +169,56 @@ h4{
     align-items: center;
     justify-content: space-around;
     padding: 1.5% 2% ;
-    border-top: 1px solid #415259;
+    border-top: 1px solid rgb(64, 82, 89);
 }
 
-.rodapé-post{
-    
+.coments{
+    border-bottom: 1px solid rgba(64, 82, 89, 0.15);
+    padding: 1%;
+    width: 98%;
+    display: grid;
+    grid-template-columns: 1fr 6fr;
+    grid-template-rows: 1fr;
+    justify-items: left;
+    align-items: flex-start;
 }
+
+.container-coment{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 3fr 1fr;
+    align-items: center;
+}
+
+.conteudo-coment{
+    grid-area: 1/1/2/3;
+    padding: 3%;
+    background-color: #e3f4fa;
+    border-radius: 5%;
+    margin:1%;
+}
+
+.username-coment{
+    margin-bottom: 3%;
+}
+
+.data-coment, .data-post{
+    font-size: 0.8rem;
+    display: flex;
+    color: rgba(64, 82, 89, 0.5);
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.data-post {
+    margin-left: 30%;
+}
+
+.carma-coment {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+
