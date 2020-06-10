@@ -1,11 +1,11 @@
 //Falta colocar um estado Geral como visto na aula de segunda
 //Falta fazer que os forms sejam controlados
-// Falta implementar as funções de comentários e carma
 //Falta colocar uma função que abra somente os comentários do card selecionado
-//Falta função para pegar comentários
 //Falta ordenar por data
 // Colocar as requisições da API num Hook
 //Colocar as formatações de data e hora num hook
+
+
 import React, { useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import IconESconde from '@material-ui/icons/ExpandLess';
@@ -17,7 +17,8 @@ import styled from 'styled-components';
 import IconUp from '../img/flechaGostei.png'
 import IconDown from '../img/flechaOdiei.png'
 import ShareIcon from '@material-ui/icons/Share';
-import SessaoComentarios from './Comentarios'
+import SessaoComentarios from './Comentarios';
+import axios from "axios";
 
 const IconeAvatar = styled(Avatar)`
     background-color: #ff782e;
@@ -29,35 +30,63 @@ const IconeShare =styled(ShareIcon)`
 `
 
 const Carma =styled.p`
-    color: ${props => {
-        if (props.isCool === 0){
-            return '#415259'
-        }else if(props.isCool > 0){
-            return '#0d9201'
-        }else{
-            return '#ff0000'
-        }
-    }};
+  color: ${props => {
+      if (props.isCool === 0){
+          return '#415259'
+      }else if(props.isCool > 0){
+          return '#0d9201'
+      }else{
+          return '#ff0000'
+      }
+  }};
+  font-weight: bold;
+  margin: 0 2%;
 `
 
 const Posts = (props) => {
   const [posts, setPosts] = useState([])
   const [expanded, setExpanded] = useState(false);
 
-  useEffect(() => {
-    setPosts(props.posts)
-  }, [props.posts])
-
   const abreComentarios = () => {
     setExpanded(!expanded);
   };
 
-  const gosteiPost = () =>{
-      console.log('gostei')
+  const gosteiPost = (id) => {
+    const token = window.localStorage.getItem("token")
+    const body ={      
+      direction: 1,
+    };
+    axios
+    .put(`${props.baseUrl}/posts/${id}/vote`, body, {
+        headers: {
+          Authorization: token
+        }
+      })
+    .then(response => {
+      console.log(response.data);
+    })
+    .catch(err => {
+      console.log(err);
+    });
   }
 
-  const odieiPost = () => {
-      console.log('odiei')
+  const odieiPost = (id) => {
+    const token = window.localStorage.getItem("token")
+    const body ={      
+      direction: -1,
+    };
+    axios
+    .put(`${props.baseUrl}/posts/${id}/vote`, body, {
+        headers: {
+          Authorization: token
+        }
+      })
+    .then(response => {
+      console.log(response.data);
+    })
+    .catch(err => {
+      console.log(err);
+    });
   }
 
   const formataData = (dataEstranha) => {
@@ -83,39 +112,37 @@ const Posts = (props) => {
     return (horaFormatada)
   }
 
-  const listaPosts = posts.map((post) =>{
-      return <article className='posts'>
+  return (
+    <MuiThemeProvider theme={theme}>
+      <div className='tela-feed'>
+        <article className='posts'>
           <section className='cabecalho-post'>
-            <IconeAvatar>{post.username.toUpperCase().substr(0, 1)}</IconeAvatar>
-            <p className="username">{post.username}</p>
+            <section className="identif-post">
+              <IconeAvatar>{props.post.username.toUpperCase().substr(0, 1)}</IconeAvatar>
+              <p className="username">{props.post.username}</p>
+            </section>
              <section className='data-post'>
-                <p>{formataData(post.createdAt)} </p>
-                <p>&nbsp; às {formataHora(post.createdAt)}</p>
+                <p>{formataData(props.post.createdAt)} </p>
+                <p>&nbsp; às {formataHora(props.post.createdAt)}</p>
               </section>
           </section>
           
           <section className='conteudo-post'>
-              <p className='titulo-post'>{post.title} </p>
-              <p className='texto-post'>"{post.text}"</p>
+              <p className='titulo-post'>{props.post.title} </p>
+              <p className='texto-post'>"{props.post.text}"</p>
           </section>
 
           <section className='icones-posts'>
-            <img src={IconUp} alt={'Gostei'} className='icones-carma' onClick={gosteiPost}/>
-            <Carma isCool={post.votesCount}>{post.votesCount}</Carma>
-            <img src={IconDown} alt={'Odiei'} className='icones-carma' onClick={odieiPost}/>
+            <img src={IconUp} alt={'Gostei'} className='icones-carma' onClick={() => gosteiPost(props.post.id)}/>
+            <Carma isCool={props.post.votesCount}>{props.post.votesCount}</Carma>
+            <img src={IconDown} alt={'Odiei'} className='icones-carma' onClick={() => odieiPost(props.post.id)}/>
             <IconeShare />
-            <p classame='rodapé-post'>{post.commentsCount} {post.commentsCount === 1? 'Comentário' : 'Comentários'}</p>
+            <p classame='rodapé-post'>{props.post.commentsCount} {props.post.commentsCount === 1? 'Comentário' : 'Comentários'}</p>
             {expanded ? <IconESconde onClick={abreComentarios}/> : <IconMostra onClick={abreComentarios}/>}
           </section>
 
-          <SessaoComentarios isMostraComent={expanded} id={post.id} baseUrl={props.baseUrl}/>
-      </article>
-  })
-
-  return (
-    <MuiThemeProvider theme={theme}>
-      <div className='tela-feed'>
-        {listaPosts}
+          <SessaoComentarios isMostraComent={expanded} id={props.post.id} baseUrl={props.baseUrl}/>
+        </article>
       </div>
     </MuiThemeProvider>
   );

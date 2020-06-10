@@ -1,4 +1,3 @@
-//Falta função para pegar comentários
 //Falta ordenar por data
 // Colocar as requisições da API num Hook
 //Colocar as formatações de data e hora num hook
@@ -21,6 +20,7 @@ const Comentarios = styled.section `
     flex-direction:column;
     justify-content: space-between;
     align-items: center;
+    border-top: 1px solid rgba(64, 82, 89, 0.3);
 `
 const IconeAvatar = styled(Avatar)`
     background-color: #feb059;
@@ -61,157 +61,174 @@ const SessaoComentarios = (props) =>{
     comentario: '',
   });
   const [comentarios, setComentarios] = useState([
-      {
-          "userVoteDirection": 0,
-          "id": "hRW0BBr0uu7luijXQgmZ",
-          "createdAt": 1591741372440,
-          "votesCount": 0,
-          "username": "gisber",
-          "text": "Great!"
-      },
-      {
-          "userVoteDirection": 0,
-          "id": "GNuoez434aFA7IjPby8K",
-          "createdAt": 1591730549167,
-          "votesCount": 0,
-          "username": "teste",
-          "text": "teste"
-      }, {
-          "userVoteDirection": 1,
-          "id": "PvA5iyq6xnHKT7LFyg73",
-          "username": "darvas",
-          "text": "Texto do comentario aqui!",
-          "votesCount": 1,
-          "createdAt": 1591622964376
-      }, {
-          "userVoteDirection": 0,
-          "id": "zKNLvP9WP9ePBYhcezfb",
-          "createdAt": 1591730582649,
-          "votesCount": 0,
-          "username": "teste",
-          "text": "teste2"
-      }
+     
   ]);
 
-//  useEffect(() => {
-//    pegaComent()
-//  }, [props.baseUrl, props.id])
-//
-//  const pegaComent = () => {
-//    const token = window.localStorage.getItem("token")
-//    axios
-//    .get(`${props.baseUrl}/posts/${props.id}`, {
-//        headers: {
-//            Authorization: token
-//        }
-//    })
-//    .then(response => {
-//    console.log(response.data)
-//    })
-//    .catch(err => {
-//       console.log(err)
-//     });
-//  }
+  useEffect(() => {
+    pegaComent()
+  }, [props.baseUrl, props.id])
 
-    const submitForm = event => {
-        event.preventDefault()
-    }
+  const pegaComent = () => {
+    const token = window.localStorage.getItem("token")
+    axios
+    .get(`${props.baseUrl}/posts/${props.id}`, {
+        headers: {
+           'Authorization': token
+        }
+    })
+    .then(response => {
+    setComentarios(response.data.post.comments)
+    })
+    .catch(err => {
+       console.log(err)
+     });
+  }
 
-    const gosteiComent = () =>{
-        console.log('gostei')
-    }
+  const submitForm = event => {
+      event.preventDefault()
+  }
 
-    const odieiComent = () => {
-        console.log('odiei')
-    }
-
-    const mudaValorInput = event => {
-      const { name, value } = event.target;
-      onChange(name, value);
+  const gosteiComent = (id) =>{
+    const token = window.localStorage.getItem("token")
+    const body ={      
+      direction: 1,
     };
+    axios
+    .put(`${props.baseUrl}/posts/${props.id}/comment/${id}/vote`, body, {
+        headers: {
+          Authorization: token
+        }
+      })
+    .then(response => {
+      console.log(response.data);
+      pegaComent()
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  }
 
-    const adicionaComent = () => {
-        console.log('funcionou botão')
-        resetForm()
+  const odieiComent = (id) => {
+    const token = window.localStorage.getItem("token")
+    const body ={      
+      direction: -1,
+    };
+    axios
+    .put(`${props.baseUrl}/posts/${props.id}/comment/${id}/vote`, body, {
+        headers: {
+          Authorization: token
+        }
+      })
+    .then(response => {
+      pegaComent()
+      console.log(response.data);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  }
+
+  const mudaValorInput = event => {
+    const { name, value } = event.target;
+    onChange(name, value);
+  };
+
+  const adicionaComent = async () => {
+    const token = window.localStorage.getItem("token")
+    const body ={      
+      text: form.comentario,
+    };
+    if(body.text === ''){
+      alert('Digite uma Comentário');
+    } else {
+      try {
+        const response = await axios.post(`${props.baseUrl}/posts/${props.id}/comment`, body, {
+          headers: {
+            Authorization: token
+          }
+        });
+        console.log(response)
+        pegaComent()
+      } catch (err) {
+        console.log(err);
+      }
     }
-
-    const formataData = (dataEstranha)=> {    
-        let dataFormatadaComprida
-        let dataFormatadaFinal
-        dataFormatadaComprida = new Date(dataEstranha)
-        let dia = (dataFormatadaComprida.getDate() < 10 ? "0" : "") + dataFormatadaComprida.getDate();
-        let mes = (dataFormatadaComprida.getMonth() + 1 < 10 ? "0" : "") + (dataFormatadaComprida.getMonth() + 1);
-        let ano = dataFormatadaComprida.getYear() - 100;
-        const novaData = dia + "/" + mes + "/" + ano
-        dataFormatadaFinal = novaData;
-        return dataFormatadaFinal
-    }
-
-    const formataHora = (dataEstranha) => {
-        let dataFormatadaComprida
-        let horaFormatada
-        dataFormatadaComprida = new Date(dataEstranha)
-        let hr = (dataFormatadaComprida.getHours() < 10 ? "0" : "") + dataFormatadaComprida.getHours();
-        let min = (dataFormatadaComprida.getMinutes() < 10 ? "0" : "") + dataFormatadaComprida.getMinutes();
-        const novaHora = hr + ":" + min
-        horaFormatada = novaHora;
-        return(horaFormatada)
-    }
-
-    const listaComent = comentarios.map((coment) => {
-      return <article className='coments'>
-            <IconeAvatar>{coment.username.toUpperCase().substr(0, 1)}</IconeAvatar>
-            <section className='container-coment'>
-                <section className='conteudo-coment'>
-                    <p className="username-coment"> <b>{coment.username}:</b></p>
-                    <p className='texto-coment'>"{coment.text}"</p>
-                </section>
-                
-                <section className='data-coment'>
-                    <p>{formataData(coment.createdAt)} </p>
-                    <p>&nbsp; às {formataHora(coment.createdAt)}</p>
-                </section>
-                
-                <section className='carma-coment'>
-                  <img src={IconUp} alt={'Gostei'} className='icones-carma-coment' onClick={gosteiComent}/>
-                  <Carma isCool={coment.votesCount}>{coment.votesCount}</Carma>
-                  <img src={IconDown} alt={'Odiei'} className='icones-carma-coment' onClick={odieiComent}/>
-                </section>
+    resetForm()
+  }
+  const formataData = (dataEstranha)=> {    
+    let dataFormatadaComprida
+    let dataFormatadaFinal
+    dataFormatadaComprida = new Date(dataEstranha)
+    let dia = (dataFormatadaComprida.getDate() < 10 ? "0" : "") + dataFormatadaComprida.getDate();
+    let mes = (dataFormatadaComprida.getMonth() + 1 < 10 ? "0" : "") + (dataFormatadaComprida.getMonth() + 1);
+    let ano = dataFormatadaComprida.getYear() - 100;
+    const novaData = dia + "/" + mes + "/" + ano
+    dataFormatadaFinal = novaData;
+    return dataFormatadaFinal
+  }
+  const formataHora = (dataEstranha) => {
+    let dataFormatadaComprida
+    let horaFormatada
+    dataFormatadaComprida = new Date(dataEstranha)
+    let hr = (dataFormatadaComprida.getHours() < 10 ? "0" : "") + dataFormatadaComprida.getHours();
+    let min = (dataFormatadaComprida.getMinutes() < 10 ? "0" : "") + dataFormatadaComprida.getMinutes();
+    const novaHora = hr + ":" + min
+    horaFormatada = novaHora;
+    return(horaFormatada)
+  }
+  const listaComent = comentarios.map((coment) => {
+    return <article className='coments'>
+        <IconeAvatar>{coment.username.toUpperCase().substr(0, 1)}</IconeAvatar>
+        <section className='container-coment'>
+            <section className='conteudo-coment'>
+                <p className="username-coment"> <b>{coment.username}:</b></p>
+                <p className='texto-coment'>"{coment.text}"</p>
             </section>
-        </article>
-  })
-
-    return(
-        <Comentarios isMostraComent={props.isMostraComent}>
-            <form onSubmit={submitForm}>
-                <TextField
-                    className={classes.inputComentario}
-                    id="outlined-secondary"
-                    label="Insira um comentário"
-                    variant="outlined"
-                    color="secondary"
-                    multiline
-                    required
-                    size="small"
-                    name='senha'
-                    value={form.senha}
-                    onChange={mudaValorInput}
-                    inputProps={{ 
-                      pattern: "{5,100}",
-                      title: "O texto deve ter entre 5 e 100 caracteres" }}
-                />
-                <Button 
-                  color="primary"
-                  className={classes.botaoComentario}
-                  onClick={adicionaComent}>
-                  Enviar
-                  <ComentAddIcon />
-                </Button>
-            </form>
             
-            {listaComent}
-        </Comentarios>
-    );
+            <section className='data-coment'>
+                <p>{formataData(coment.createdAt)} </p>
+                <p>&nbsp; às {formataHora(coment.createdAt)}</p>
+            </section>
+            
+            <section className='carma-coment'>
+              <img src={IconUp} alt={'Gostei'} className='icones-carma-coment' onClick={() => gosteiComent(coment.id)}/>
+              <Carma isCool={coment.votesCount}>{coment.votesCount}</Carma>
+              <img src={IconDown} alt={'Odiei'} className='icones-carma-coment' onClick={() => odieiComent(coment.id)}/>
+            </section>
+        </section>
+    </article>
+})
+  return(
+      <Comentarios isMostraComent={props.isMostraComent}>
+          <form onSubmit={submitForm}>
+              <TextField
+                  className={classes.inputComentario}
+                  id="outlined-secondary"
+                  label="Insira um comentário"
+                  variant="outlined"
+                  color="secondary"
+                  multiline
+                  required
+                  size="small"
+                  name='comentario'
+                  value={form.comentario}
+                  onChange={mudaValorInput}
+                  inputProps={{ 
+                    pattern: "{5,100}",
+                    title: "O texto deve ter entre 5 e 100 caracteres" }}
+              />
+              <Button 
+                color="primary"
+                className={classes.botaoComentario}
+                onClick={adicionaComent}>
+                Enviar
+                <ComentAddIcon />
+              </Button>
+          </form>
+          
+          {listaComent}
+      </Comentarios>
+  );
 }
 
 export default SessaoComentarios

@@ -1,5 +1,4 @@
 //Falta fazer que os forms sejam controlados
-//Falta estilizar melhor o add post
 //Falta colocar a restrição para entrar nesta página somente se estiver logado
 
 import React, { useState, useEffect } from "react";
@@ -124,6 +123,10 @@ const HomePage = (props) => {
     localStorage.clear();
     history.push("/");
   };
+  
+  const listaPosts = posts.map((post) =>{ 
+    return <Posts pegaPosts={pegaPosts()} baseUrl={props.baseUrl} post={post}/>
+  })
 
   const adicionaPost = async () => {
     const token = window.localStorage.getItem("token")
@@ -205,9 +208,9 @@ const HomePage = (props) => {
                 </Button> 
               </form>
             </section>
-            
-            <Posts posts={posts} baseUrl={props.baseUrl}/>
-          
+
+            {listaPosts}
+
           </Box>
         </Container>
         <ScrollTop {...props}>

@@ -18,7 +18,6 @@ import IconSenha from '@material-ui/icons/VpnKey';
 import axios from "axios";
 import useForm from "../hooks/Formulario"
 
-
 const useStyles = makeStyles((theme) => ({
   margin: {
     margin: theme.spacing(1),
@@ -34,7 +33,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-
 const RegisterPage = (props ) => {
   const classes = useStyles();
   const history = useHistory();
@@ -47,17 +45,15 @@ const RegisterPage = (props ) => {
 
   const submitForm = event => {
     event.preventDefault()
+    cadastro()
   }
-  
   
   const mudaValorInput = event => {
     const { name, value } = event.target;
     onChange(name, value);
   };
       
-  
   const cadastro = () => {
-
     const body ={      
       username: form.user,
       password: form.senha,
@@ -74,7 +70,6 @@ const RegisterPage = (props ) => {
         console.log(err);
       });
   };
-
 
     return (
       <MuiThemeProvider theme={theme}>
