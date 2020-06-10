@@ -48,7 +48,8 @@ const RegisterPage = (props ) => {
   const submitForm = event => {
     event.preventDefault()
   }
-
+  
+  
   const mudaValorInput = event => {
     const { name, value } = event.target;
     onChange(name, value);
@@ -56,25 +57,22 @@ const RegisterPage = (props ) => {
       
   
   const cadastro = () => {
-    console.log(form.user)
-    console.log(form.senha)
-    console.log(form.email)
 
-  //  const body ={      
-  //    user: form.user,
-  //    senha: form.senha,
-  //    email: form.email,
-  //  }
-  //  axios
-  //    .post(`${props.baseUrl}/signup`, body)
-  //    .then(response => {
-  //      console.log(response.data);
-  //      resetForm();
-  //      history.push("/home");
-  //    })
-  //    .catch(err => {
-  //      console.log(err);
-  //    });
+    const body ={      
+      username: form.user,
+      password: form.senha,
+      email: form.email,
+    }
+    axios
+      .post(`${props.baseUrl}/signup`, body)
+      .then(response => {
+        console.log(response.data);
+        resetForm();
+        history.push("/home");
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
 
@@ -91,6 +89,7 @@ const RegisterPage = (props ) => {
                   id="input-user"
                   type='text'
                   required
+                  name='user'
                   value={form.user}
                   onChange={mudaValorInput}
                   inputProps={{ 
