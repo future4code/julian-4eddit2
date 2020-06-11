@@ -1,5 +1,4 @@
 //Falta fazer que os forms sejam controlados
-//Falta colocar a restrição para entrar nesta página somente se estiver logado
 
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
@@ -91,6 +90,10 @@ const HomePage = (props) => {
   });
   
   useEffect(() => {
+    const token = window.localStorage.getItem("token")
+    if (token === null){
+      history.push("/")
+    }
     pegaPosts()
   }, [props.baseUrl])
 

@@ -1,6 +1,5 @@
-//Falta colocar um estado Geral como visto na aula de segunda
+//Falta colocar um estado Geral como visto na aula desta semana
 //Falta fazer que os forms sejam controlados
-//Falta colocar uma função que abra somente os comentários do card selecionado
 //Falta ordenar por data
 // Colocar as requisições da API num Hook
 //Colocar as formatações de data e hora num hook
