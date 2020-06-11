@@ -208,8 +208,8 @@ const HomePage = (props) => {
                 </Button> 
               </form>
             </section>
-
-            {listaPosts}
+              
+            <section className='tela-feed'>{listaPosts}</section>
 
           </Box>
         </Container>

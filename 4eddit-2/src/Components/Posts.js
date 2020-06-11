@@ -114,7 +114,6 @@ const Posts = (props) => {
 
   return (
     <MuiThemeProvider theme={theme}>
-      <div className='tela-feed'>
         <article className='posts'>
           <section className='cabecalho-post'>
             <section className="identif-post">
@@ -143,7 +142,6 @@ const Posts = (props) => {
 
           <SessaoComentarios isMostraComent={expanded} id={props.post.id} baseUrl={props.baseUrl}/>
         </article>
-      </div>
     </MuiThemeProvider>
   );
 };
