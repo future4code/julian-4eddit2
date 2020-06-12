@@ -114,7 +114,7 @@ const HomePage = (props) => {
   };
   
   const listaPosts = postsContext.posts.map((post) => {
-    return <Posts />
+    return <Posts detalhePost={post}/>
   })
   
   return (

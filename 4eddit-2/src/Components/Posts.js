@@ -1,5 +1,3 @@
-//Colocar as formatações de data e hora num hook
-
 import React, { useState, useContext } from "react";
 import Avatar from '@material-ui/core/Avatar';
 import IconESconde from '@material-ui/icons/ExpandLess';
@@ -12,7 +10,6 @@ import IconUp from '../img/flechaGostei.png'
 import IconDown from '../img/flechaOdiei.png'
 import ShareIcon from '@material-ui/icons/Share';
 import SessaoComentarios from './Comentarios';
-import ListaPostsContext from '../contexts/ListaPostsContext';
 import { votoPost } from "../actions/ApiPosts"
 
 const IconeAvatar = styled(Avatar)`
@@ -39,12 +36,10 @@ const Carma =styled.p`
 `
 
 const Posts = (props) => {
-  const postContext = useContext(ListaPostsContext);
   const [expanded, setExpanded] = useState(false);
   const abreComentarios = () => {
     setExpanded(!expanded);
   };
-
 
   const formataData = (dataEstranha) => {
     let dataFormatadaComprida
@@ -73,30 +68,30 @@ const Posts = (props) => {
         <article className='posts'>
           <section className='cabecalho-post'>
             <section className="identif-post">
-            <IconeAvatar>{postContext.posts.username === undefined ? "An" : postContext.posts.username.toUpperCase().substr(0, 1)}</IconeAvatar>
-              <p className="username">{postContext.posts.username}</p>
+            <IconeAvatar>{props.detalhePost.username === undefined ? "An" : props.detalhePost.username.toUpperCase().substr(0, 1)}</IconeAvatar>
+              <p className="username">{props.detalhePost.username}</p>
             </section>
              <section className='data-post'>
-                <p>{formataData(postContext.posts.createdAt)} </p>
-                <p>&nbsp; às {formataHora(postContext.posts.createdAt)}</p>
+                <p>{formataData(props.detalhePost.createdAt)} </p>
+                <p>&nbsp; às {formataHora(props.detalhePost.createdAt)}</p>
               </section>
           </section>
           
           <section className='conteudo-post'>
-              <p className='titulo-post'>{postContext.posts.title} </p>
-              <p className='texto-post'>"{postContext.posts.text}"</p>
+              <p className='titulo-post'>{props.detalhePost.title} </p>
+              <p className='texto-post'>"{props.detalhePost.text}"</p>
           </section>
 
           <section className='icones-posts'>
-            <img src={IconUp} alt={'Gostei'} className='icones-carma' onClick={() => votoPost(postContext.posts.id, 1)}/>
-            <Carma isCool={postContext.posts.votesCount}>{postContext.posts.votesCount}</Carma>
-            <img src={IconDown} alt={'Odiei'} className='icones-carma' onClick={() => votoPost(postContext.posts.id, -1)}/>
+            <img src={IconUp} alt={'Gostei'} className='icones-carma' onClick={() => votoPost(props.detalhePost.id, 1)}/>
+            <Carma isCool={props.detalhePost.votesCount}>{props.detalhePost.votesCount}</Carma>
+            <img src={IconDown} alt={'Odiei'} className='icones-carma' onClick={() => votoPost(props.detalhePost.id, -1)}/>
             <IconeShare />
-            <p classame='rodapé-post'>{postContext.posts.commentsCount} {postContext.posts.commentsCount === 1? 'Comentário' : 'Comentários'}</p>
+            <p classame='rodapé-post'>{props.detalhePost.commentsCount} {props.detalhePost.commentsCount === 1? 'Comentário' : 'Comentários'}</p>
             {expanded ? <IconESconde onClick={abreComentarios}/> : <IconMostra onClick={abreComentarios}/>}
           </section>
 
-          <SessaoComentarios isMostraComent={expanded} postId={postContext.posts.id}/>
+          <SessaoComentarios isMostraComent={expanded} postId={props.detalhePost.id}/>
         </article>
     </MuiThemeProvider>
   );
