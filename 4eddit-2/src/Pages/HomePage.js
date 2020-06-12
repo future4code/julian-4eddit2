@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { useHistory } from "react-router";
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -69,6 +69,7 @@ function ScrollTop(props) {
     }
   };
 
+
   return (
     <Zoom in={trigger}>
       <div onClick={handleClick} role="presentation" className={classes.root}>
@@ -82,10 +83,13 @@ const HomePage = (props) => {
   const postsContext = useContext(ListaPostsContext);
   const history = useHistory();
   const classes = useStyles();
+  const [posts, setPosts] =useState([])
   const { form, onChange, resetForm } = useForm({
     mensagem: '',
     titulo: '',
   });
+
+  console.log('homepage', postsContext)
   
   useEffect(() => {
     const token = window.localStorage.getItem("token")
@@ -94,12 +98,20 @@ const HomePage = (props) => {
     }
   }, [props.baseUrl])
 
+  useEffect(() => {
+      const listaPosts = postsContext.posts.map((post) => {
+    return <Posts detalhePost={post}/>
+  })
+    setPosts(listaPosts)
+    }
+  , [postsContext.posts])
+
   const submitForm = event => {
     event.preventDefault()
   }
 
   const criarPost = () => {
-    createPost(form.titulo, form.mensagem)
+    createPost(form.titulo, form.mensagem, postsContext.dispatch)
     resetForm()
   }
 
@@ -113,10 +125,7 @@ const HomePage = (props) => {
     history.push("/");
   };
   
-  const listaPosts = postsContext.posts.map((post) => {
-    return <Posts detalhePost={post}/>
-  })
-  
+ 
   return (
     <MuiThemeProvider theme={theme}>
         <div className='tela-feed'>
@@ -171,7 +180,7 @@ const HomePage = (props) => {
                 </form>
               </section>
                 
-              <section className='tela-feed'>{listaPosts}</section>
+                    <section className='tela-feed'>{posts}</section>
   
             </Box>
           </Container>

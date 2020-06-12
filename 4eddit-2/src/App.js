@@ -14,9 +14,12 @@ const App = () => {
   const [state, dispatch] = useReducer(listaReducer, initialState);
 
   useEffect(() => {
-    pegaPosts()
+    pegaPosts(dispatch)
   }, [])
-  console.log(state)
+  
+  
+  console.log("estado", state)
+
 
   return (
     <ListaPostsContext.Provider value={{posts: state.posts, dispatch: dispatch }}>

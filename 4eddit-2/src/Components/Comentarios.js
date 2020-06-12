@@ -15,7 +15,7 @@ import { pegaComentarios } from "../actions/ApiComent"
 import { adicionaComent } from "../actions/ApiComent"
 
 const Comentarios = styled.section `
-    display: ${props => props.isMostraComent ? 'flex' : 'none'};
+    display: flex;
     flex-direction:column;
     justify-content: space-between;
     align-items: center;
@@ -62,7 +62,7 @@ const SessaoComentarios = (props) =>{
   const [state, dispatch] = useReducer(listaReducer, initialState);
 
   useEffect(() => {
-    pegaComentarios(props.postId)
+    pegaComentarios(props.postId, dispatch)
   }, [])
 
   const submitForm = event => {
@@ -70,7 +70,7 @@ const SessaoComentarios = (props) =>{
   }
 
   const criaComentario = () => {
-    adicionaComent(form.comentario, state.coment.id)
+    adicionaComent(form.comentario, props.postId, dispatch)
     resetForm()
   }
 
@@ -102,7 +102,7 @@ const SessaoComentarios = (props) =>{
   }
 
 
-  const listaComent = state.coment.map((coment) => {
+  const listaComent = state.comentarios.map((coment) => {
     return <article className='coments' key={coment.id}>
         <IconeAvatar>{coment.username.toUpperCase().substr(0, 1)}</IconeAvatar>
         <section className='container-coment'>
@@ -123,8 +123,9 @@ const SessaoComentarios = (props) =>{
         </section>
     </article>
 })
+
   return(
-      <Comentarios isMostraComent={props.isMostraComent}>
+      <Comentarios>
           <form onSubmit={submitForm}>
               <TextField
                   className={classes.inputComentario}

@@ -3,11 +3,12 @@ import axios from "axios";
 const baseUrl = 'https://us-central1-labenu-apis.cloudfunctions.net/labEddit';
 const token = window.localStorage.getItem("token")
 
-const buscaComentarios = () => ({
+const buscaComentarios = (comentarios) => ({
   type: "PEGA_COMENTARIOS",
+  comentarios
 });
 
-export const pegaComentarios = (id) => async (dispatch) => {
+export const pegaComentarios = async (id, dispatch) => {
   const token = window.localStorage.getItem("token")
     try {
     const response = await axios.get(
@@ -23,7 +24,7 @@ export const pegaComentarios = (id) => async (dispatch) => {
   }
 };
 
-export const adicionaComent = (text, id) => async (dispatch) => {
+export const adicionaComent = async (text, id, dispatch) => {
     const body = { text };
     if(body.text === ''){
       alert('Digite uma Comentário');
@@ -35,14 +36,14 @@ export const adicionaComent = (text, id) => async (dispatch) => {
           }
         });
         console.log(response)
-        dispatch(pegaComentarios(id));
+        pegaComentarios(id, dispatch);
         } catch (err) {
             console.log(err);
         }
     }
 };
 
-export const votoComentario = (idComent, idPost, direction) => async (dispatch) => {
+export const votoComentario = async (idComent, idPost, direction, dispatch) => {
   const body = {direction};
     try {
     const response = await axios.put(`${baseUrl}/posts/${idPost}/comment/${idComent}/vote`, body, {
@@ -51,7 +52,7 @@ export const votoComentario = (idComent, idPost, direction) => async (dispatch) 
         }
     });
     console.log(response.data)
-    dispatch(pegaComentarios(idComent));
+    pegaComentarios(idPost, dispatch);
   } catch (err) {
     console.log(err);
   }

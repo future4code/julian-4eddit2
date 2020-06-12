@@ -4,14 +4,16 @@ export const initialState = {
 };
 
 export const listaReducer = (state, action) => {
+  console.log(action)
   switch (action.type) {
     case 'PEGA_POSTS':
-        const listaDePosts = [action.posts]
+        const listaDePosts = action.posts
          return { ...state, posts: listaDePosts };
     case 'PEGA_COMENTARIOS':
-        const listaDeComentarios = [action.comentarios]
-        return listaDeComentarios;
+    
+        const listaDeComentarios = action.comentarios
+        return { ...state, comentarios: listaDeComentarios };
     default:
-      return { ...state, comentarios: listaDeComentarios};
+      return state;
   }
 };

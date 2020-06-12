@@ -3,11 +3,13 @@ import axios from "axios";
 const baseUrl= 'https://us-central1-labenu-apis.cloudfunctions.net/labEddit';
 const token = window.localStorage.getItem("token")
 
-const buscaPosts = () => ({
+const buscaPosts = (posts) => ({
   type: "PEGA_POSTS",
+  posts: posts
 });
 
-export const pegaPosts = () => async (dispatch) => {
+export const pegaPosts = async (dispatch) => {
+  console.log("dispatch", dispatch)
   const token = window.localStorage.getItem("token")
     try {
     const response = await axios.get(
@@ -24,7 +26,7 @@ export const pegaPosts = () => async (dispatch) => {
   }
 };
 
-export const createPost = (title, text) => async (dispatch) => {
+export const createPost = async (title, text, dispatch) => {
     const body = {
       text,
       title,
@@ -41,7 +43,7 @@ export const createPost = (title, text) => async (dispatch) => {
                 }
             });
             console.log(response)
-            dispatch(pegaPosts());
+            pegaPosts(dispatch);
         } catch (err) {
             console.log(err);
         }
@@ -49,7 +51,8 @@ export const createPost = (title, text) => async (dispatch) => {
 };
 
 
-export const votoPost = (id, direction) => async (dispatch) => {
+export const votoPost = async (id, direction, dispatch) => {
+  console.log('VOTOPOST', id, direction)
   const body = {direction};
     try {
     const response = await axios.put(`${baseUrl}/posts/${id}/vote`, body, {
@@ -58,7 +61,7 @@ export const votoPost = (id, direction) => async (dispatch) => {
         }
     });
     console.log(response.data)
-    dispatch(pegaPosts());
+    pegaPosts(dispatch);
   } catch (err) {
     console.log(err);
   }

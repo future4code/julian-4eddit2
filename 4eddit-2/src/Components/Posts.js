@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useReducer } from "react";
 import Avatar from '@material-ui/core/Avatar';
 import IconESconde from '@material-ui/icons/ExpandLess';
 import IconMostra from '@material-ui/icons/ExpandMore';
@@ -10,7 +10,8 @@ import IconUp from '../img/flechaGostei.png'
 import IconDown from '../img/flechaOdiei.png'
 import ShareIcon from '@material-ui/icons/Share';
 import SessaoComentarios from './Comentarios';
-import { votoPost } from "../actions/ApiPosts"
+import { votoPost } from "../actions/ApiPosts";
+import { listaReducer, initialState } from "../reducers/ListaPosts";
 
 const IconeAvatar = styled(Avatar)`
     background-color: #ff782e;
@@ -37,6 +38,7 @@ const Carma =styled.p`
 
 const Posts = (props) => {
   const [expanded, setExpanded] = useState(false);
+  const [state, dispatch] = useReducer(listaReducer, initialState);
   const abreComentarios = () => {
     setExpanded(!expanded);
   };
@@ -62,7 +64,7 @@ const Posts = (props) => {
     horaFormatada = novaHora;
     return (horaFormatada)
   }
-
+  console.log('votedirection', props.detalhePost.userVoteDirection)
   return (
     <MuiThemeProvider theme={theme}>
         <article className='posts'>
@@ -83,15 +85,15 @@ const Posts = (props) => {
           </section>
 
           <section className='icones-posts'>
-            <img src={IconUp} alt={'Gostei'} className='icones-carma' onClick={() => votoPost(props.detalhePost.id, 1)}/>
+            <img src={IconUp} alt={'Gostei'} className='icones-carma' onClick={() => votoPost(props.detalhePost.id, 1, dispatch)}/>
             <Carma isCool={props.detalhePost.votesCount}>{props.detalhePost.votesCount}</Carma>
-            <img src={IconDown} alt={'Odiei'} className='icones-carma' onClick={() => votoPost(props.detalhePost.id, -1)}/>
+            <img src={IconDown} alt={'Odiei'} className='icones-carma' onClick={() => votoPost(props.detalhePost.id, -1, dispatch)}/>
             <IconeShare />
             <p classame='rodapé-post'>{props.detalhePost.commentsCount} {props.detalhePost.commentsCount === 1? 'Comentário' : 'Comentários'}</p>
             {expanded ? <IconESconde onClick={abreComentarios}/> : <IconMostra onClick={abreComentarios}/>}
           </section>
 
-          <SessaoComentarios isMostraComent={expanded} postId={props.detalhePost.id}/>
+          {expanded && <SessaoComentarios postId={props.detalhePost.id}/>}
         </article>
     </MuiThemeProvider>
   );
