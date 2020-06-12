@@ -16,10 +16,6 @@ const App = () => {
   useEffect(() => {
     pegaPosts(dispatch)
   }, [])
-  
-  
-  console.log("estado", state)
-
 
   return (
     <ListaPostsContext.Provider value={{posts: state.posts, dispatch: dispatch }}>

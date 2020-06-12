@@ -64,7 +64,7 @@ const Posts = (props) => {
     horaFormatada = novaHora;
     return (horaFormatada)
   }
-  console.log('votedirection', props.detalhePost.userVoteDirection)
+
   return (
     <MuiThemeProvider theme={theme}>
         <article className='posts'>

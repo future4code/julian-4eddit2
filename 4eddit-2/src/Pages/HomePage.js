@@ -89,8 +89,7 @@ const HomePage = (props) => {
     titulo: '',
   });
 
-  console.log('homepage', postsContext)
-  
+    
   useEffect(() => {
     const token = window.localStorage.getItem("token")
     if (token === null){

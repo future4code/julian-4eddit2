@@ -71,8 +71,7 @@ const RegisterPage = (props ) => {
           history.push("/home");
       }catch (err) {
         resetForm()
-        console.log(err);
-      }
+        }
     }
   };
 

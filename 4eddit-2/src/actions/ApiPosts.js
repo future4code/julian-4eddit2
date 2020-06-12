@@ -9,7 +9,6 @@ const buscaPosts = (posts) => ({
 });
 
 export const pegaPosts = async (dispatch) => {
-  console.log("dispatch", dispatch)
   const token = window.localStorage.getItem("token")
     try {
     const response = await axios.get(
@@ -52,7 +51,6 @@ export const createPost = async (title, text, dispatch) => {
 
 
 export const votoPost = async (id, direction, dispatch) => {
-  console.log('VOTOPOST', id, direction)
   const body = {direction};
     try {
     const response = await axios.put(`${baseUrl}/posts/${id}/vote`, body, {
@@ -60,7 +58,6 @@ export const votoPost = async (id, direction, dispatch) => {
             Authorization: token
         }
     });
-    console.log(response.data)
     pegaPosts(dispatch);
   } catch (err) {
     console.log(err);

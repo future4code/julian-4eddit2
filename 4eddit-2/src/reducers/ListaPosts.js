@@ -4,8 +4,7 @@ export const initialState = {
 };
 
 export const listaReducer = (state, action) => {
-  console.log(action)
-  switch (action.type) {
+    switch (action.type) {
     case 'PEGA_POSTS':
         const listaDePosts = action.posts
          return { ...state, posts: listaDePosts };

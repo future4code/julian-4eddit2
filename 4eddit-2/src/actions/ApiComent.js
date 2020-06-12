@@ -35,8 +35,7 @@ export const adicionaComent = async (text, id, dispatch) => {
             Authorization: token
           }
         });
-        console.log(response)
-        pegaComentarios(id, dispatch);
+          pegaComentarios(id, dispatch);
         } catch (err) {
             console.log(err);
         }
@@ -51,7 +50,6 @@ export const votoComentario = async (idComent, idPost, direction, dispatch) => {
             Authorization: token
         }
     });
-    console.log(response.data)
     pegaComentarios(idPost, dispatch);
   } catch (err) {
     console.log(err);
