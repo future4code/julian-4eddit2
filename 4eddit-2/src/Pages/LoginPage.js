@@ -52,15 +52,14 @@ const LoginPage = (props) => {
   });
 
   const login = async () => {
-    
     const body ={      
       email: form.user,
       password: form.password,
     };
-    if(body.email == ''){
+    if(body.email === ''){
       alert('Digite um usuário');
     }
-    else if(body.password == ''){
+    else if(body.password === ''){
       alert('Digite sua senha');
     } else {
       try {

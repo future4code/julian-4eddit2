@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useHistory } from "react-router";
 import { makeStyles } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
@@ -40,12 +40,11 @@ const RegisterPage = (props ) => {
   const { form, onChange, resetForm } = useForm({
     user: '',
     senha: '',
-    email: '',
+    email: ''
   });
 
   const submitForm = event => {
     event.preventDefault()
-    cadastro()
   }
   
   const mudaValorInput = event => {
@@ -53,22 +52,27 @@ const RegisterPage = (props ) => {
     onChange(name, value);
   };
       
-  const cadastro = () => {
+  const cadastro = async () => {
     const body ={      
       username: form.user,
       password: form.senha,
       email: form.email,
     }
-    axios
-      .post(`${props.baseUrl}/signup`, body)
-      .then(response => {
-        console.log(response.data);
-        resetForm();
-        history.push("/home");
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    if(form.user === ""){
+      alert('Digite um nome de usuário')
+    }else if(form.email === ""){
+      alert('Digite um e-mail')
+    }else if(form.senha === ""){
+      alert('Digite uma senha')
+    }else{
+      try{
+        const response = await axios.post(`${props.baseUrl}/signup`, body);
+          localStorage.setItem("token", response.data.token);
+          history.push("/home");
+      }catch (err) {
+        resetForm()
+        }
+    }
   };
 
     return (
@@ -103,12 +107,12 @@ const RegisterPage = (props ) => {
                 <FilledInput
                   id="input-email"
                   required
-                  type='text'
+                  type='email'
                   name='email'
                   value={form.email}
                   onChange={mudaValorInput}
                   inputProps={{ 
-                    pattern: "/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/gi",
+                    pattern: "/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/gi",
                     title: "Insira um e-mail válido" }}
                   endAdornment={
                     <InputAdornment position="end">

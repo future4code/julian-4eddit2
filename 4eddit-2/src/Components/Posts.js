@@ -1,11 +1,4 @@
-//Falta colocar um estado Geral como visto na aula desta semana
-//Falta fazer que os forms sejam controlados
-//Falta ordenar por data
-// Colocar as requisições da API num Hook
-//Colocar as formatações de data e hora num hook
-
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useReducer } from "react";
 import Avatar from '@material-ui/core/Avatar';
 import IconESconde from '@material-ui/icons/ExpandLess';
 import IconMostra from '@material-ui/icons/ExpandMore';
@@ -17,14 +10,15 @@ import IconUp from '../img/flechaGostei.png'
 import IconDown from '../img/flechaOdiei.png'
 import ShareIcon from '@material-ui/icons/Share';
 import SessaoComentarios from './Comentarios';
-import axios from "axios";
+import { votoPost } from "../actions/ApiPosts";
+import { listaReducer, initialState } from "../reducers/ListaPosts";
 
 const IconeAvatar = styled(Avatar)`
     background-color: #ff782e;
     margin-right: 3%;
 `
 const IconeShare =styled(ShareIcon)`
-    margin-right: 20vw;
+    margin-right: 15vw;
     margin-left: 10vw;
 `
 
@@ -43,50 +37,11 @@ const Carma =styled.p`
 `
 
 const Posts = (props) => {
-  const [posts, setPosts] = useState([])
   const [expanded, setExpanded] = useState(false);
-
+  const [state, dispatch] = useReducer(listaReducer, initialState);
   const abreComentarios = () => {
     setExpanded(!expanded);
   };
-
-  const gosteiPost = (id) => {
-    const token = window.localStorage.getItem("token")
-    const body ={      
-      direction: 1,
-    };
-    axios
-    .put(`${props.baseUrl}/posts/${id}/vote`, body, {
-        headers: {
-          Authorization: token
-        }
-      })
-    .then(response => {
-      console.log(response.data);
-    })
-    .catch(err => {
-      console.log(err);
-    });
-  }
-
-  const odieiPost = (id) => {
-    const token = window.localStorage.getItem("token")
-    const body ={      
-      direction: -1,
-    };
-    axios
-    .put(`${props.baseUrl}/posts/${id}/vote`, body, {
-        headers: {
-          Authorization: token
-        }
-      })
-    .then(response => {
-      console.log(response.data);
-    })
-    .catch(err => {
-      console.log(err);
-    });
-  }
 
   const formataData = (dataEstranha) => {
     let dataFormatadaComprida
@@ -99,7 +54,6 @@ const Posts = (props) => {
     dataFormatadaFinal = novaData;
     return dataFormatadaFinal
   }
-
   const formataHora = (dataEstranha) => {
     let dataFormatadaComprida
     let horaFormatada
@@ -116,30 +70,30 @@ const Posts = (props) => {
         <article className='posts'>
           <section className='cabecalho-post'>
             <section className="identif-post">
-              <IconeAvatar>{props.post.username.toUpperCase().substr(0, 1)}</IconeAvatar>
-              <p className="username">{props.post.username}</p>
+            <IconeAvatar>{props.detalhePost.username === undefined ? "An" : props.detalhePost.username.toUpperCase().substr(0, 1)}</IconeAvatar>
+              <p className="username">{props.detalhePost.username}</p>
             </section>
              <section className='data-post'>
-                <p>{formataData(props.post.createdAt)} </p>
-                <p>&nbsp; às {formataHora(props.post.createdAt)}</p>
+                <p>{formataData(props.detalhePost.createdAt)} </p>
+                <p>&nbsp; às {formataHora(props.detalhePost.createdAt)}</p>
               </section>
           </section>
           
           <section className='conteudo-post'>
-              <p className='titulo-post'>{props.post.title} </p>
-              <p className='texto-post'>"{props.post.text}"</p>
+              <p className='titulo-post'>{props.detalhePost.title} </p>
+              <p className='texto-post'>"{props.detalhePost.text}"</p>
           </section>
 
           <section className='icones-posts'>
-            <img src={IconUp} alt={'Gostei'} className='icones-carma' onClick={() => gosteiPost(props.post.id)}/>
-            <Carma isCool={props.post.votesCount}>{props.post.votesCount}</Carma>
-            <img src={IconDown} alt={'Odiei'} className='icones-carma' onClick={() => odieiPost(props.post.id)}/>
+            <img src={IconUp} alt={'Gostei'} className='icones-carma' onClick={() => votoPost(props.detalhePost.id, 1, dispatch)}/>
+            <Carma isCool={props.detalhePost.votesCount}>{props.detalhePost.votesCount}</Carma>
+            <img src={IconDown} alt={'Odiei'} className='icones-carma' onClick={() => votoPost(props.detalhePost.id, -1, dispatch)}/>
             <IconeShare />
-            <p classame='rodapé-post'>{props.post.commentsCount} {props.post.commentsCount === 1? 'Comentário' : 'Comentários'}</p>
+            <p classame='rodapé-post'>{props.detalhePost.commentsCount} {props.detalhePost.commentsCount === 1? 'Comentário' : 'Comentários'}</p>
             {expanded ? <IconESconde onClick={abreComentarios}/> : <IconMostra onClick={abreComentarios}/>}
           </section>
 
-          <SessaoComentarios isMostraComent={expanded} id={props.post.id} baseUrl={props.baseUrl}/>
+          {expanded && <SessaoComentarios postId={props.detalhePost.id}/>}
         </article>
     </MuiThemeProvider>
   );
