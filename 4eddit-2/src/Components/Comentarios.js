@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useContext } from "react";
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import ComentAddIcon from '@material-ui/icons/AddComment';
@@ -13,6 +13,7 @@ import { listaReducer, initialState } from "../reducers/ListaPosts";
 import { votoComentario } from "../actions/ApiComent"
 import { pegaComentarios } from "../actions/ApiComent"
 import { adicionaComent } from "../actions/ApiComent"
+import ListaPostsContext from '../contexts/ListaPostsContext';
 
 const Comentarios = styled.section `
     display: flex;
@@ -59,10 +60,11 @@ const SessaoComentarios = (props) =>{
     const { form, onChange, resetForm } = useForm({
     comentario: '',
   });
-  const [state, dispatch] = useReducer(listaReducer, initialState);
+  const dispatchContext = useContext(ListaPostsContext);
+  const [state] = useReducer(listaReducer, initialState);
 
   useEffect(() => {
-    pegaComentarios(props.postId, dispatch)
+    pegaComentarios(props.postId, dispatchContext.dispatch)
   }, [])
 
   const submitForm = event => {
@@ -70,7 +72,7 @@ const SessaoComentarios = (props) =>{
   }
 
   const criaComentario = () => {
-    adicionaComent(form.comentario, props.postId, dispatch)
+    adicionaComent(form.comentario, props.postId, dispatchContext.dispatch)
     resetForm()
   }
 
