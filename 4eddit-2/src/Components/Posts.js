@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react";
+import React, { useState,  useContext } from "react";
 import Avatar from '@material-ui/core/Avatar';
 import IconESconde from '@material-ui/icons/ExpandLess';
 import IconMostra from '@material-ui/icons/ExpandMore';
@@ -11,7 +11,7 @@ import IconDown from '../img/flechaOdiei.png'
 import ShareIcon from '@material-ui/icons/Share';
 import SessaoComentarios from './Comentarios';
 import { votoPost } from "../actions/ApiPosts";
-import { listaReducer, initialState } from "../reducers/ListaPosts";
+import ListaPostsContext from '../contexts/ListaPostsContext';
 
 const IconeAvatar = styled(Avatar)`
     background-color: #ff782e;
@@ -38,7 +38,7 @@ const Carma =styled.p`
 
 const Posts = (props) => {
   const [expanded, setExpanded] = useState(false);
-  const [state, dispatch] = useReducer(listaReducer, initialState);
+  const postsContext = useContext(ListaPostsContext);
   const abreComentarios = () => {
     setExpanded(!expanded);
   };
@@ -85,9 +85,9 @@ const Posts = (props) => {
           </section>
 
           <section className='icones-posts'>
-            <img src={IconUp} alt={'Gostei'} className='icones-carma' onClick={() => votoPost(props.detalhePost.id, 1, dispatch)}/>
+            <img src={IconUp} alt={'Gostei'} className='icones-carma' onClick={() => votoPost(props.detalhePost.id, 1, postsContext.dispatch)}/>
             <Carma isCool={props.detalhePost.votesCount}>{props.detalhePost.votesCount}</Carma>
-            <img src={IconDown} alt={'Odiei'} className='icones-carma' onClick={() => votoPost(props.detalhePost.id, -1, dispatch)}/>
+            <img src={IconDown} alt={'Odiei'} className='icones-carma' onClick={() => votoPost(props.detalhePost.id, -1, postsContext.dispatch)}/>
             <IconeShare />
             <p classame='rodapé-post'>{props.detalhePost.commentsCount} {props.detalhePost.commentsCount === 1? 'Comentário' : 'Comentários'}</p>
             {expanded ? <IconESconde onClick={abreComentarios}/> : <IconMostra onClick={abreComentarios}/>}
