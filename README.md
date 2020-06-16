@@ -1,3 +1,8 @@
+## Link: **[foreddit2.surge.sh](foreddit2.surge.sh).**
+
+foreddit2.surge.sh
+
+
 ## Exercício da Semana:
 
 Essa semana, vocês irão implementar uma rede social! Já fizemos vários protótipos de redes sociais, mas nenhuma delas realmente funcional. A ideia agora é fazer uma rede real, com cadastro, login, posts, likes e comentários. Para isso, iremos nos basear no **[reddit.com](https://reddit.com).**
